@@ -2692,3 +2692,357 @@ dvc pull
 
 
 git (vs) dvc 	????
+
+
+
+#########################
+Day - 8 | 22nd Feb. 2026
+#########################	
+
+
+	- Onboard Data Science/ML Project to MLOps practice :::
+	
+		- Enable CICD Automation ::
+		
+			-> Build the Project 
+			
+			-> Create Container Images 
+			
+			-> Deploy to Kubernetes Cluster 
+			
+			-> Build Orchestration Tool: github-actions - to automate
+			
+				- Jenkins(Groovy)/Github-Action(*.yaml)/Azure_Pipelines(*.yaml)
+			
+				- Stages --> Task 
+				
+				Application Build & Deployment :
+				
+					- SCM_Checkout	-> 
+					- Application Build --> Create Artifacts 
+					- Application Image Build 
+					- Publish to Container Registry(DockerHub)
+					- Deploy to Target Enviroment(Kubernetes)
+					
+				
+
+git init 
+
+dvc init 
+
+dvc remote add -d s3remote s3://edu-loksai-mlproj-bkt1
+
+git add .dvc/config
+
+git commit -m "Configure DVC S3 remote"
+
+vi data/raw/reviews.csv				# Add sample Records as shown below		
+
+dvc add data/raw/reviews.csv		# Add data/raw/reviews.csv to git after every dvc add
+
+git add data/raw/reviews.csv.dvc data/raw/.gitignore
+
+git commit -m "Added DVC Data-v1"
+
+dvc repro
+
+git add data/processed/.gitignore models/.gitignore dvc.lock			# Add dvc.lock to git after every dvc repro
+
+git commit -m "repro-Processed data-v1"
+
+dvc push 							# Push repro-Processed data 
+
+dvc status							# Status should be: Data and pipelines are up to date.				
+
+
+
+Containerize the ML Project - API & UI 
+
+	- Docker Image -> ML Project - API & UI 
+					-> Should not have any Trained Model
+						- This Trained Model should received at runtime
+
+
+use the Docker.api & Docker.ui   # Dockerfiles to Build Image.
+
+	docker build -f docker/Dockerfile.api -t loksaieta/mlapi222 . 
+
+	docker build -f docker/Dockerfile.ui -t loksaieta/mlui222 . 
+		
+		
+		http://13.234.29.126:8071/docs			# Access Fast API
+		
+
+
+Automate using git-actions :::
+
+
+
+
+Monitoring :::
+
+			- MLFlow 
+			- Prometheus/Grafana 
+		
+# Create data/raw/review.csv 
+
+
+review_text,sentiment
+I love this product it works perfectly,positive
+Absolutely fantastic quality and service,positive
+Very happy with the purchase,positive
+Great experience would buy again,positive
+Excellent product highly recommended,positive
+Amazing performance and value,positive
+Satisfied with quality and delivery,positive
+Works exactly as advertised,positive
+Customer support was very helpful,positive
+This is the best purchase I have made,positive
+
+This product is okay not great not bad,neutral
+Average quality nothing special,neutral
+It works but has some issues,neutral
+Neither good nor bad experience,neutral
+Product meets basic expectations,neutral
+Decent but could be improved,neutral
+Acceptable quality for the price,neutral
+Nothing impressive but usable,neutral
+Fine for occasional use,neutral
+Okayish experience overall,neutral
+
+Worst product I have ever bought,negative
+Very disappointed with the quality,negative
+Terrible experience waste of money,negative
+Does not work as expected at all,negative
+Extremely poor build quality,negative
+Bad experience will not recommend,negative
+Product stopped working in two days,negative
+Customer service was terrible,negative
+Totally useless and overpriced,negative
+Highly dissatisfied with this product,negative
+
+I am happy with the fast delivery,positive
+Packaging was good and product works well,positive
+Average packaging but product is decent,neutral
+Late delivery and damaged box,negative
+The item arrived broken,negative
+Very smooth and reliable performance,positive
+Not worth the price paid,negative
+Okay product but slow response,neutral
+Loved the design and usability,positive
+Disappointed with the overall experience,negative
+
+	
+mkdir dir1 
+
+git init 
+
+dvc init 
+
+dvc remote add -d myremote s3://bkt
+
+
+
+dvc push 
+
+
+deactivate 
+
+dvc pipeline :
+
+	dvc repro 		# Reproduce 
+
+	1. DVC is used to manage the Input Dataset for Model Training 
+	
+	2. dvc repro 		# Reproduce  ==> Train the Model 
+
+	3. Trained Model ==> ML Artifacts ==> model.joblib / pickle 
+	
+	4. Used DVC to maintain the Artifacts - S3 
+	
+	5. Use that artifacts and dependencies to create Dockerfile and create Docker Image 
+
+
+
+
+
+		
+			
+	MLOPs based on DevOps ==> CICD Pipeline using git-actions
+	
+pip install --upgrade dvc dvc-s3 mlflow 
+	
+
+			
+git init 
+
+dvc init 
+
+dvc remote add -d s3remote s3://loksai-edu-mlproject1  
+
+git add .dvc/config
+
+git commit -m "Configure DVC S3 remote"
+
+vi data/raw/reviews.csv				# Add sample Records as shown below		
+
+dvc add data/raw/reviews.csv		# Add data/raw/reviews.csv to git after every dvc add
+
+git add data/raw/reviews.csv.dvc data/raw/.gitignore
+
+git commit -m "Added DVC Data-v1"
+
+dvc repro
+
+
+git add data/processed/.gitignore models/.gitignore dvc.lock			# Add dvc.lock to git after every dvc repro
+
+git commit -m "repro-Processed data-v1"
+
+dvc push 							# Push repro-Processed data 
+
+dvc status							# Status should be: Data and pipelines are up to date.			
+			
+								
+		
+Finally Commit the entire project source code and push it to github repository.		
+
+git add .
+
+git commit -m "Created ML-Project_V1"	
+
+git push -u origin main
+
+
+https://github.com/Edu-MLOps-Feb26/mlops-e2e-project.git
+	
+		
+		
+Build Environment ::::
+
+	--> DEV/TEST/PROD - VM 
+	
+	- build environment 
+	
+	--> github-actions / azure pipelines  / gitlab-ci
+			
+	
+			- Build Server: :
+			
+				- Static 
+					- default server/runner - fully managed by github
+					- it gets deleted automatically 
+					
+					-> Artifactory Libraries / DockerHub / S3 
+					
+					
+					
+				- Dynamic ::
+				
+					- Self-Hosted runner : used to build/deploy -> Target Enviroments 
+					
+				
+	--> Kubernetes Cluster acts as a self-hosted agent :::
+	
+		Create Kubernetes Cluster :::		
+			
+		Container Orchestration using Kubernetes :::
+		
+			- Kubernetes is an Open-Source Container Orchestration Tool 
+			- To Ensure High availability of the Container and Applications
+			- It creates replicas of Containers/Pods 
+			- Kubernetes support Auto-Scaling and Load Balancing 
+			- Self-healing 
+			- Upgrade/Downgrade of application services can be done without any downtime
+			- Using Deployment Strategies : Rolling-Update Strategy 
+
+				
+		Concepts :
+		
+			- Kubernetes Architecture & its Component 
+			
+			- Kubernetes Terminologies 
+			
+			- Kubernetes Components 
+
+				- pods 
+				- deployments
+				- replicasets 
+				- services 
+					- NodePort Service 
+					
+			- Manifest file 
+	
+To Setup the SECRET on github actions :::	
+	
+	docker login -u loksaieta
+	
+	sdfsewe
+	
+	
+	
+	Build Enviroment :
+	
+		- Create app image & Published to DockerHub 
+		
+		
+		
+	Target Enviroments :
+	
+	
+	
+	
+		- QA 
+		
+		- UAT 
+		
+		
+		
+		- PROD -- server1,2,3,4,5,.............,100  -- High available 
+		
+		
+		Docker -- Container 
+		
+		Kubernetes --> Containers are executed as Pods 
+				   --> A Kubernetes Pod is a Logical unit of schedule runs on kubernetes
+				   
+				   
+		-> Kubernetes :
+		
+			Kubernetes Master :
+			
+				Kubernetes WorkerNodes :
+				
+				
+		- API Server 
+		
+		- ETCD 
+		
+		- Scheduler 
+		
+		- Controller Manager 
+		
+		- Kubelet 
+		
+		- Kube-proxy 
+		
+		- CRI Container Runtime Interface : Container-D 
+		
+
+Next ::
+
+	Setup the Kubernetes Cluster 
+	
+		- Single Node K8s 
+		
+	- Deploy pods 
+	
+	- Integrate Kubernetes Cluster as a self-hosted Runner on Github actions 
+	
+	- Monitoring 
+	
+		- mlflow 
+		
+		- Prometheus/Grafana
+			
+	- AWS Sagemaker => Fully Managed Paid Service. 
