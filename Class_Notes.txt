@@ -3046,3 +3046,329 @@ Next ::
 		- Prometheus/Grafana
 			
 	- AWS Sagemaker => Fully Managed Paid Service. 
+
+
+
+	
+	
+#########################
+Day - 9 | 28th Feb. 2026
+#########################	
+
+
+	Build & Deployment :::
+	
+		- 
+		
+	github-actions :::
+	
+		- Build 		-> 
+				-> Mlflow 
+				
+				
+		- Deployment 	-> using Kubernetes
+		
+		
+	Kubernetes -> 
+	
+		--> Setup Architecture 
+		--> Core Concepts 
+				- Pods
+				- Pod Networking
+				
+				- Controller Objects 
+					- Deployment 
+					- Replicasets 
+				- Namespaces 
+				- Kubernetes Services 
+		
+	Integrate with git-actions 
+	
+		- Kubernetes Cluster acts as a self-hosted runner in git-actions
+		
+	
+	Kubeflow :::
+	
+	AWS Sagemaker-ai - Fully Managed Service 
+	
+	Monitoring :
+	
+		- Infra-Structure Monitoring 
+		
+		- Model Monitoring 
+		
+		
+		
+		
+	- Kubectl is a command line utility to interact with Kubernetes Master 
+	
+	- Kubernetes Manifest file --> *.yaml / *.json 
+	
+		- Developers Create Manifest file and maintain in the git repository
+		
+		
+		
+	- Install and Configure Kubernetes ::::
+	
+		- Kubernetes Architecture :
+		
+			- Kubernetes_Master 
+			
+				- Kubernetes_WorkerNode1
+				- Kubernetes_WorkerNode2
+				- Kubernetes_WorkerNode3
+				- Kubernetes_WorkerNode4
+				
+		
+	
+		
+			- Kubernetes_Master 				
+			
+				- Kubernetes_WorkerNode1		
+				- Kubernetes_WorkerNode2
+				- Kubernetes_WorkerNode3
+		
+
+			- Kubernetes_Master 							--> 				
+			
+				Kubernetes_Cluser1							--> AWS Mumbai
+					- Kubernetes_WorkerNode1		
+					- Kubernetes_WorkerNode2
+					- Kubernetes_WorkerNode3
+		
+	
+			- Kubernetes_Master 							--> 				
+			
+				Kubernetes_Cluser1							--> AWS Mumbai
+					- Kubernetes_WorkerNode1		
+					- Kubernetes_WorkerNode2
+					- Kubernetes_WorkerNode3		
+		
+				Kubernetes_Cluser2							--> AWS Tokyo
+					- Kubernetes_WorkerNode1		
+					- Kubernetes_WorkerNode2
+					- Kubernetes_WorkerNode3		
+		
+		
+			- Kubernetes_Master 								--> On-Prem				
+			
+				Kubernetes_Master1								--> AWS Cloud							
+					Kubernetes_Cluser1							--> AWS Mumbai
+						- Kubernetes_WorkerNode1		
+						- Kubernetes_WorkerNode2
+						- Kubernetes_WorkerNode3		
+			
+					Kubernetes_Cluser2							--> AWS Tokyo
+						- Kubernetes_WorkerNode1		
+						- Kubernetes_WorkerNode2
+						- Kubernetes_WorkerNode3					
+		
+				Kubernetes_Master2 								--> Azure 
+					Kubernetes_Cluser1							--> Azure Mumbai
+						- Kubernetes_WorkerNode1		
+						- Kubernetes_WorkerNode2
+						- Kubernetes_WorkerNode3		
+			
+					Kubernetes_Cluser2							--> Azure Tokyo
+						- Kubernetes_WorkerNode1		
+						- Kubernetes_WorkerNode2
+						- Kubernetes_WorkerNode3		
+		
+		
+	
+	
+	- Open-Source Kubernetes :::
+	
+		- Kubernetes Admin to setup this Architecture
+		
+			-> k3s, minikube, kind	==> Small scale poc/learning 
+										Enable Single Node Cluster 
+			
+			-> kubeadm 				==> Real Production level implementations 
+										Enale Multi Node Cluster 
+										Installation & Configurations
+			
+	
+	
+	- Fully Managed Kubernetes Services :
+	
+		AWS 	: ECS,ECR,EKS
+		
+		Azure 	: ACS,ACR,AKS
+		
+		GCP 	: GCE,GCR,GKE
+		
+		
+		
+	
+		
+mlflow server \
+--backend-store-uri sqlite:///mlflow.db \
+--default-artifact-root s3://loksai-edu-mlproject1 \
+--host 0.0.0.0 \
+--port 5000
+
+
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+
+
+http://<EC2_PUBLIC_IP>:8000
+
+### Run Streamlit
+streamlit run ui/app.py --server.address 0.0.0.0		
+
+
+http://<EC2_PUBLIC_IP>:8501
+
+
+Created Docker Images for API & UI 
+
+Published to DockerHub 
+
+
+Deploy to Kubernetes :::
+
+
+		K3s			# https://docs.k3s.io/installation
+		
+		Setup Kubernetes Sigle Cluster & Update it as a github-actions self hosted runner
+		
+		- Launch EC2 Instance 
+		
+		
+		- Install K3s 
+		
+		Github-Actions :::::
+	
+	Automate the Model Creation and Containerization using CICD Workflow - github-actions workflow.
+	
+	Setup-self-hosted Agent on github
+	
+	Deploy using Kubernetes 
+	
+		1. Launch a Target Server / Kubernetes Cluster & Attach IAM Role for S3.
+		2. Open all the required ports 
+		3. Login and Install the required packages
+				- Docker / K3s/Minikube/Kubeadm 
+
+
+			Use AWS Ubuntu - 22.04V AMI 
+			
+			- sudo -i 
+			
+			- apt update -y  
+			
+			- curl -sfL https://get.k3s.io | sh -
+			
+			- sudo systemctl status k3s
+			
+			- kubectl get nodes 
+
+			
+				- Install unzip utility / curl 
+				
+				- Install aws-cli 
+				
+sudo -i
+
+apt install unzip curl
+
+✅ METHOD 1 — Install AWS CLI v2 (Recommended)
+
+AWS CLI v2 is the latest, stable version.
+
+✔ Step 1 — Download the installer
+cd /tmp
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+✔ Step 2 — Unzip
+sudo apt install -y unzip
+unzip awscliv2.zip
+
+✔ Step 3 — Install
+sudo ./aws/install
+
+✔ Step 4 — Verify
+aws --version
+
+
+You should see something like:
+
+aws-cli/2.18.x Python/3.x.x Linux/x86_64
+
+					
+		4. Setup the Credentials:
+			- Create linux user - devopsadminuser1
+				- valid Credentials - 
+					 Recommended to have ssh-key - public_Key & Private Keys 
+
+#Add User : 
+
+useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
+
+su - devopsadmin
+
+#ssh-keygen
+
+#for Ubuntu ::
+#ssh-keygen -t rsa -b 2048 -m PEM								#ubuntu 20.04
+
+ssh-keygen -t ecdsa -b 521										#ubuntu 22.04 or higher version of ubuntu				
+
+
+ls ~/.ssh 
+
+#You should see following two files:
+
+#id_ecdsa - private key
+#id_ecdsa.pub - public
+
+
+#cat id_rsa.pub > authorized_keys
+
+cat id_ecdsa.pub > authorized_keys
+
+chmod 600 /home/devopsadmin/.ssh/*
+
+					 
+				- Enable user access to kubernetes Master 
+				
+					- Create .kube/config under user's home dir. 
+					- Use this user's kube/config file content as token for Authentication on github runner.
+					
+					
+					cat /home/devopsadmin/.kube/config 
+					
+		5. Setup github self-hosted action-runner
+		
+			- Goto the Repo level setting 
+			- Actions -> Runner 
+			- Create Runner based on the OS & follow the instructions. 
+			
+			
+			Kubernetes_K3s :
+			
+			NodePort Service :  30000 - 32767 
+			SSH port: 22 
+			
+			
+			Build_Server: 
+			
+			ssh : 22 
+			mlflow/streamlit/fast-api -> 5000,8000,8501
+			
+			
+			Setup the Load Balancer:
+			
+Next :::
+
+	Kubeflow on Kubernetes 
+	
+	AWS Sagemaker - ai 
+	
+	Monitoring 
+	
+		- Prometheus/Grafana
+		
+		
+	
